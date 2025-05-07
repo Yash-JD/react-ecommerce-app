@@ -1,9 +1,9 @@
 import "./index.css";
 import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
+import Login from "./components/Login";
 import { ToastContainer } from "react-toastify";
-import SignUp from "./pages/SignUp";
-import VerifyOTP from "./pages/VerifyOTP";
+import SignUp from "./components/SignUp";
+import VerifyOTP from "./components/VerifyOTP";
 import Home from "./pages/Home";
 
 function App() {

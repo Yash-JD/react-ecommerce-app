@@ -37,10 +37,17 @@ const VerifyOTP = () => {
   };
 
   return (
-    <div>
-      <h2>Enter OTP</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-100 to-gray-300 flex items-center justify-center px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-xl rounded-2xl px-10 py-8 w-full max-w-md"
+      >
+        <h2 className="text-3xl font-extrabold text-black mb-8 text-center">
+          Enter OTP
+        </h2>
+
         <input
+          className="mb-6 p-4 bg-gray-100 rounded-lg w-full border-none rounded-md bg-white text-black focus:outline-none focus:ring-2 focus:ring-gray-600 text-sm"
           name="otp"
           type="text"
           placeholder="Enter OTP"
@@ -50,8 +57,12 @@ const VerifyOTP = () => {
           maxLength="6"
           required
         />
-        <span> </span>
-        <button type="submit" disabled={loading}>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-black text-white text-sm font-medium py-2 rounded-lg hover:bg-gray-800 transition duration-200"
+        >
           Verify
         </button>
       </form>

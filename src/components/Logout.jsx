@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Logout = () => {
   const [status, setStatus] = useState(true);
@@ -7,7 +8,7 @@ const Logout = () => {
 
   const handleClick = () => {
     if (status) {
-      localStorage.clear("userToken");
+      Cookies.remove("userToken");
       setStatus(false);
     } else {
       navigate("/login");
