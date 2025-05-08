@@ -3,8 +3,11 @@ import { Navigate } from "react-router-dom";
 import { FaSearch, FaRegHeart } from "react-icons/fa";
 import { IoCartOutline } from "react-icons/io5";
 import { FiUser } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
+  // handle dropdown for mens, womens & kids
   const category = ["cloths", "luxury"];
 
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -40,13 +43,21 @@ const Navbar = () => {
     setShowUserMenu((prev) => !prev);
   };
 
+  // handle login & logout
+  const navigate = useNavigate();
+
+  const handleUserActive = () => {
+    Cookies.remove("userToken");
+    return navigate("/login");
+  };
+
   return (
     <nav className="flex items-center justify-between px-40 py-4 bg-white w-full h-[88px] gap-x-9">
       {/* Left: Logo */}
-      <div className="flex items-center space-x-2 w-[96px] h-[32px]">
+      <div className="flex items-center space-x-2 h-[32px]">
         {/* Replace this with your actual logo */}
         <div className="flex items-center font-bold text-lg text-black">
-          <span className="mr-1"></span> cyber
+          <button onClick={() => navigate("/")}>E-Commerce Shop</button>
         </div>
       </div>
 
@@ -152,14 +163,20 @@ const Navbar = () => {
           <FiUser
             className="text-black w-6 h-6 cursor-pointer"
             onClick={handleUserMenu}
+            // onMouseEnter={handleUserMenu}
+            // onMouseLeave={handleUserMenu}
           />
           {showUserMenu && (
             <div className="absolute right-0 top-8 w-36 bg-white border border-gray-200 shadow-md rounded-lg py-2 z-50">
               <button className="block w-full px-4 py-2 text-left hover:bg-gray-100">
                 My Orders
               </button>
-              <button className="block w-full px-4 py-2 text-left hover:bg-gray-100">
+              <button
+                className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                onClick={handleUserActive}
+              >
                 Logout
+                {/* {userActive ? "logout" : "login"} */}
               </button>
             </div>
           )}

@@ -77,12 +77,12 @@ const Login = () => {
                 <input
                   type="radio"
                   name="role"
-                  value="admin"
-                  checked={form.role === "admin"}
+                  value="seller"
+                  checked={form.role === "seller"}
                   onChange={handleChange}
                   className="mr-2 accent-black"
                 />
-                Admin
+                seller
               </label>
             </div>
           </div>
