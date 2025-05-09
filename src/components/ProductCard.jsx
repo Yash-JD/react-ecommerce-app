@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PiGreaterThan, PiLessThan } from "react-icons/pi";
+import {
+  incrementWishlistCounter,
+  decrementWishlistCounter,
+} from "../features/wishlistSlice";
+import { useDispatch } from "react-redux";
 
 const ProductCard = ({ imageUrls, name, price, quantity }) => {
   const totalImages = imageUrls.length;
   const [liked, setLiked] = useState(false);
   const [currentImage, setCurrentImage] = useState(0);
+  const dispatch = useDispatch();
 
   const prevImage = () => {
     setCurrentImage((prev) => (prev > 0 ? prev - 1 : prev));
@@ -15,12 +21,18 @@ const ProductCard = ({ imageUrls, name, price, quantity }) => {
     setCurrentImage((prev) => (prev < totalImages - 1 ? prev + 1 : prev));
   };
 
+  const handleLike = () => {
+    setLiked((prev) => !prev);
+    if (liked) return dispatch(decrementWishlistCounter());
+    else return dispatch(incrementWishlistCounter());
+  };
+
   return (
-    <div className="relative bg-white rounded-2xl p-4 shadow-md w-full max-w-sm mx-auto border border-gray-200 mb-6">
+    <div className="relative bg-white rounded-2xl p-4 shadow-md w-full max-w-sm mx-auto border border-gray-200 mb-6 cursor-pointer">
       {/* Heart Icon */}
       <div
         className="absolute top-5 right-5 cursor-pointer text-xl"
-        onClick={() => setLiked(!liked)}
+        onClick={handleLike}
       >
         {liked ? (
           <FaHeart className="text-red-600" />
@@ -49,7 +61,7 @@ const ProductCard = ({ imageUrls, name, price, quantity }) => {
               <img
                 key={index}
                 src={image.image_urls}
-                className={`absolute w-full h-full justify-center object-contain rounded-2xl  transition-opacity duration-200 ${
+                className={`absolute w-full h-full justify-center object-contain rounded-2xl transition-opacity duration-200 ${
                   index === currentImage ? "opacity-100" : "opacity-0"
                 } `}
               />
@@ -89,7 +101,7 @@ const ProductCard = ({ imageUrls, name, price, quantity }) => {
               : "bg-black text-white hover:bg-gray-800"
           }`}
         >
-          Buy Now
+          Read More
         </button>
       </div>
     </div>

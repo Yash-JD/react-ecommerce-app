@@ -5,7 +5,8 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import VerifyOTP from "./pages/VerifyOTP";
 import Home from "./pages/Home";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Products from "./pages/Products";
 
 function App() {
   return (
@@ -20,9 +21,11 @@ function App() {
           element={
             <ProtectedRoute>
               <Home />
+              {/* <Products /> */}
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<h2>404 Not Found</h2>} />
       </Routes>
       <ToastContainer position="top-center" />
     </>
