@@ -12,9 +12,15 @@ export const cartCounterSlice = createSlice({
     decrementCartCounter: (state) => {
       state.value += 1;
     },
+    onLoadSetCartCount: (state, action) => {
+      state.value = action.payload;
+    },
   },
 });
 
-export const { incrementCartCounter, decrementCartCounter } =
-  cartCounterSlice.actions;
+export const {
+  incrementCartCounter,
+  decrementCartCounter,
+  onLoadSetCartCount,
+} = cartCounterSlice.actions;
 export default cartCounterSlice.reducer;
