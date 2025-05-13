@@ -14,7 +14,15 @@ const Logout = () => {
       navigate("/login");
     }
   };
-  return <button onClick={handleClick}>{status ? "logout" : "login"}</button>;
+
+  return (
+    <button
+      onClick={handleClick}
+      className="w-auto p-3 bg-black text-white text-sm font-medium py-2 rounded-lg hover:bg-gray-800 transition duration-200"
+    >
+      {status ? "logout" : "login"}
+    </button>
+  );
 };
 
 export default Logout;
