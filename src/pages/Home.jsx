@@ -63,23 +63,38 @@ const Home = () => {
           <h2 className="text-2xl font-semibold">Browse By Category</h2>
         </div>
         <div className="flex gap-16 overflow-x-auto no-scrollbar">
-          <button className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0">
+          <button
+            className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0"
+            onClick={() => navigate("/products")}
+          >
             <FiSmartphone className="text-4xl mb-2"></FiSmartphone>
             <div className="text-md font-medium">Mobiles</div>
           </button>
-          <button className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0">
+          <button
+            className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0"
+            onClick={() => navigate("/products")}
+          >
             <FiWatch className="text-4xl mb-2"></FiWatch>
             <div className="text-md font-medium">Watches</div>
           </button>
-          <button className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0">
+          <button
+            className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0"
+            onClick={() => navigate("/products")}
+          >
             <FiCamera className="text-4xl mb-2"></FiCamera>
             <div className="text-md font-medium">Cameras</div>
           </button>
-          <button className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0">
+          <button
+            className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0"
+            onClick={() => navigate("/products")}
+          >
             <FiHeadphones className="text-4xl mb-2"></FiHeadphones>
             <div className="text-md font-medium">Headphones</div>
           </button>
-          <button className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0">
+          <button
+            className="flex flex-col items-center justify-center w-36 h-36 bg-gray-100 rounded-2xl shrink-0"
+            onClick={() => navigate("/products")}
+          >
             <FiMonitor className="text-4xl mb-2"></FiMonitor>
             <div className="text-md font-medium">Monitors</div>
           </button>

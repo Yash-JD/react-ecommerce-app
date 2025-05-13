@@ -68,7 +68,7 @@ const Navbar = () => {
         {/* Favorites Icon with counter */}
         <div className="relative">
           <FaRegHeart
-            className="text-black w-6 h-6 hover:cursor-pointer hover:text-red-600"
+            className="text-black w-5 h-5 hover:cursor-pointer hover:scale-110"
             onClick={() => navigate("/wishlist")}
           />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
@@ -78,7 +78,7 @@ const Navbar = () => {
 
         {/* Cart Icon with counter */}
         <div className="relative">
-          <IoCartOutline className="text-black w-6 h-6" />
+          <IoCartOutline className="text-black w-6 h-6 hover:cursor-pointer hover:scale-110" />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
             {cartCounter}
           </span>
@@ -87,7 +87,7 @@ const Navbar = () => {
         {/* User Icon */}
         <div className="relative">
           <FiUser
-            className="text-black w-6 h-6 cursor-pointer"
+            className="text-black w-6 h-6 cursor-pointer hover:cursor-pointer hover:scale-110"
             onClick={() => setShowUserMenu((prev) => !prev)}
             // onMouseEnter={handleUserMenu}
             // onMouseLeave={handleUserMenu}
