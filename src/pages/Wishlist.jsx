@@ -1,37 +1,19 @@
 import React, { useEffect, useState } from "react";
-import ProductCard from "../components/ProductCard";
+import { useDispatch } from "react-redux";
 import API from "../services/api";
-import { useDispatch, useSelector } from "react-redux";
+import ProductCard from "../components/ProductCard";
 import { onLoadSetWishlistCount } from "../features/wishlistSlice";
 
-const Products = () => {
-  const [response, setResponse] = useState([]);
-  const [loading, setLoading] = useState(false);
+const Wishlist = () => {
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [wishlist, setWishlist] = useState([]);
-  // const wishlist = useSelector((state) => state.wishlistCounter.allProducts);
   const dispatch = useDispatch();
 
-  // fetch all products
-  async function fetchProducts() {
-    try {
-      setLoading(true);
-      const res = await API.get("/products");
-      setResponse(res.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  }
-
-  // fetch all wishlist
   async function wishlistProducts() {
     try {
       setWishlistLoading(true);
       const result = await API.get("/wishlist");
       dispatch(onLoadSetWishlistCount(result.data.wishlist.length));
-      // result.data.wishlist.forEach((item) => dispatch(addLikedProducts(item)));
       setWishlist(result.data.wishlist);
       console.log(wishlist);
       setWishlistLoading(false);
@@ -41,9 +23,7 @@ const Products = () => {
     }
   }
 
-  // fetch on first render only
   useEffect(() => {
-    fetchProducts();
     wishlistProducts();
   }, []);
 
@@ -51,11 +31,10 @@ const Products = () => {
     <div className="w-full h-full overflow-x-hidden overflow-y-hidden my-4">
       {/* display all products */}
       <div className="flex flex-wrap">
-        {loading && wishlistLoading ? (
+        {wishlistLoading ? (
           <h2>Loading...</h2>
-        ) : response && response.products && response.products.length > 0 ? (
-          //  && wishlist && wishlist.length
-          response.products.map((product) => (
+        ) : wishlist && wishlist.length ? (
+          wishlist.map((product) => (
             <ProductCard
               key={product.id}
               id={product.id}
@@ -63,12 +42,12 @@ const Products = () => {
               name={product.name}
               price={product.price}
               quantity={product.quantity}
-              isLiked={wishlist.some((item) => item.id === product.id)}
+              isLiked={true}
             />
           ))
         ) : (
           <h2 className="mx-auto font-bold bg-slate-200 p-5">
-            No Products Found
+            No Wishlist Found
           </h2>
         )}
       </div>
@@ -76,4 +55,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Wishlist;

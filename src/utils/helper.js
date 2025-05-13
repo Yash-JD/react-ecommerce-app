@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 export const validateEmail = (email) => {
   // check if it contains more than one @
   if (email.indexOf("@") != email.lastIndexOf("@")) return false;
@@ -33,4 +35,8 @@ export const validatePassword = (password) => {
   )
     return true;
   else return false;
+};
+
+export const getCookie = () => {
+  return Cookies.get("userToken");
 };

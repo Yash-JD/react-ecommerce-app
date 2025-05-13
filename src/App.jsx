@@ -7,26 +7,39 @@ import VerifyOTP from "./pages/VerifyOTP";
 import Home from "./pages/Home";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Products from "./pages/Products";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Wishlist from "./pages/Wishlist";
 
 function App() {
   return (
     <>
+      <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
-
+        <Route path="/" element={<Home />} />
         <Route
-          path="/"
+          path="/products"
           element={
             <ProtectedRoute>
-              <Home />
-              {/* <Products /> */}
+              <Products />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<h2>404 Not Found</h2>} />
       </Routes>
+      <Footer />
       <ToastContainer position="top-center" />
     </>
   );

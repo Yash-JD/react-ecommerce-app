@@ -34,7 +34,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await API.post("/api/auth/login", form);
+      const response = await API.post("/auth/login", form);
 
       if (response.status == "200") {
         // Save token which contains user information

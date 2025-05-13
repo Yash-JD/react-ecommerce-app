@@ -6,10 +6,11 @@ import {
   decrementWishlistCounter,
 } from "../features/wishlistSlice";
 import { useDispatch } from "react-redux";
+import API from "../services/api";
 
-const ProductCard = ({ imageUrls, name, price, quantity }) => {
+const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
   const totalImages = imageUrls.length;
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState(isLiked);
   const [currentImage, setCurrentImage] = useState(0);
   const dispatch = useDispatch();
 
@@ -21,10 +22,27 @@ const ProductCard = ({ imageUrls, name, price, quantity }) => {
     setCurrentImage((prev) => (prev < totalImages - 1 ? prev + 1 : prev));
   };
 
-  const handleLike = () => {
-    setLiked((prev) => !prev);
-    if (liked) return dispatch(decrementWishlistCounter());
-    else return dispatch(incrementWishlistCounter());
+  const handleLike = async (id) => {
+    try {
+      if (isLiked) {
+        isLiked = false;
+        await API.delete("/wishlist", { data: { productId: id } });
+        dispatch(decrementWishlistCounter());
+        // dispatch(removeLikedProducts(id));
+      } else {
+        if (liked) {
+          await API.delete("/wishlist", { data: { productId: id } });
+          dispatch(decrementWishlistCounter());
+          // dispatch(addLikedProducts(id));
+        } else {
+          await API.post("/wishlist", { productId: id });
+          dispatch(incrementWishlistCounter());
+        }
+      }
+      setLiked((prev) => !prev);
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
+    }
   };
 
   return (
@@ -32,7 +50,7 @@ const ProductCard = ({ imageUrls, name, price, quantity }) => {
       {/* Heart Icon */}
       <div
         className="absolute top-5 right-5 cursor-pointer text-xl"
-        onClick={handleLike}
+        onClick={() => handleLike(id)}
       >
         {liked ? (
           <FaHeart className="text-red-600" />

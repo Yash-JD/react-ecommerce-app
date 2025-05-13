@@ -38,7 +38,7 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const response = await API.post("/api/auth/signup", form);
+      const response = await API.post("/auth/signup", form);
 
       if (response.status == "200") {
         // save server otp token in localstorage

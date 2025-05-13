@@ -16,7 +16,7 @@ const VerifyOTP = () => {
       const serverOTPToken = localStorage.getItem("serverOTPToken");
       if (!serverOTPToken) return toast.error("OTP expired");
 
-      const response = await API.post("/api/auth/verify-otp", {
+      const response = await API.post("/auth/verify-otp", {
         otp,
         serverOTPToken,
       });

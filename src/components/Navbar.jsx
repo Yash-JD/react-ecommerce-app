@@ -30,14 +30,14 @@ const Navbar = () => {
       </div>
 
       {/* Search Bar */}
-      <div className="flex items-center bg-[#F5F5F5] rounded-lg px-4 py-3 w-[433px] h-[56px]">
+      {/* <div className="flex items-center bg-[#F5F5F5] rounded-lg px-4 py-3 w-[433px] h-[56px]">
         <FaSearch className="text-gray-500 text-lg mr-2" />
         <input
           type="text"
           placeholder="Search"
           className="bg-transparent text-sm text-gray-600 placeholder-gray-500 placeholder-opacity-50 focus:outline-none w-full"
         />
-      </div>
+      </div> */}
 
       {/* Navigation Links */}
       <div className="flex gap-8 text-[16px] font-medium items-center whitespace-nowrap">
@@ -64,10 +64,13 @@ const Navbar = () => {
       </div>
 
       {/* Icons Section */}
-      <div className="flex items-center gap-6 w-[144px] h-[32px] relative">
+      <div className="flex items-center gap-6 w-[144px] h-[32px] relative ">
         {/* Favorites Icon with counter */}
         <div className="relative">
-          <FaRegHeart className="text-black w-6 h-6" />
+          <FaRegHeart
+            className="text-black w-6 h-6 hover:cursor-pointer hover:text-red-600"
+            onClick={() => navigate("/wishlist")}
+          />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
             {wishlistCounter}
           </span>
