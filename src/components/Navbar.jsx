@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between px-40 py-4 bg-white w-full h-[88px] gap-x-9">
+    <nav className="flex items-center justify-between px-40 py-4 bg-gray-200 w-full h-[88px] gap-x-9">
       {/* Left: Logo */}
       <div className="flex items-center space-x-2 h-[32px]">
         {/* logo */}

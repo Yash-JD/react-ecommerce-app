@@ -10,6 +10,7 @@ import Products from "./pages/Products";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Wishlist from "./pages/Wishlist";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
@@ -25,6 +26,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/:id"
+          element={
+            <ProtectedRoute>
+              <ProductDetails />
             </ProtectedRoute>
           }
         />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PiGreaterThan, PiLessThan } from "react-icons/pi";
 import {
@@ -7,12 +7,14 @@ import {
 } from "../features/wishlistSlice";
 import { useDispatch } from "react-redux";
 import API from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
   const totalImages = imageUrls.length;
   const [liked, setLiked] = useState(isLiked);
   const [currentImage, setCurrentImage] = useState(0);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const prevImage = () => {
     setCurrentImage((prev) => (prev > 0 ? prev - 1 : prev));
@@ -100,15 +102,6 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
       {/* Price */}
       <p className="text-center text-[24px] font-bold mt-4">${price}</p>
 
-      {/* quantity Info */}
-      <p
-        className={`text-center text-sm mt-1 ${
-          quantity < 5 ? "text-red-500" : "text-green-400"
-        }`}
-      >
-        {quantity > 0 ? `${quantity} left in stock` : "Out of stock"}
-      </p>
-
       {/* Buy Now Button */}
       <div className="flex justify-center mt-4 mb-2">
         <button
@@ -118,6 +111,7 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
               : "bg-black text-white hover:bg-gray-800"
           }`}
+          onClick={() => navigate(`/products/${id}`)}
         >
           Read More
         </button>

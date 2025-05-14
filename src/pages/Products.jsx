@@ -3,7 +3,6 @@ import ProductCard from "../components/ProductCard";
 import API from "../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { onLoadSetWishlistCount } from "../features/wishlistSlice";
-import { addCategory } from "../features/filterSlice";
 
 const Products = () => {
   const [response, setResponse] = useState([]);
@@ -33,7 +32,7 @@ const Products = () => {
       const result = await API.get("/wishlist");
       dispatch(onLoadSetWishlistCount(result.data.wishlist.length));
       setWishlist(result.data.wishlist);
-      // console.log(wishlist);
+      console.log(wishlist);
       setWishlistLoading(false);
     } catch (error) {
       console.log(error);
@@ -58,7 +57,7 @@ const Products = () => {
 
   const handleSearch = async () => {
     try {
-      // setLoading(true);
+      setLoading(true);
       let url = "/products?category=";
       url += searchCategory.join(",");
       // Update the browser's URL without reloading the page
@@ -75,6 +74,7 @@ const Products = () => {
   const handleResetFilters = () => {
     setSearchCategory([]);
     fetchProducts();
+    window.history.pushState(null, "", "");
   };
 
   return (
@@ -148,7 +148,7 @@ const Products = () => {
       {/* display all products */}
       <div className="grid grid-cols-1 gap-5 w-3/4 xl:grid-cols-2">
         {loading && wishlistLoading ? (
-          <h2>Loading...</h2>
+          <h2 className="mx-auto font-bold bg-slate-200 p-5">Loading...</h2>
         ) : response && response.products && response.products.length > 0 ? (
           //  && wishlist && wishlist.length
           response.products.map((product) => (
