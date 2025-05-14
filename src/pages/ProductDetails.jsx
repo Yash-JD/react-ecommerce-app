@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import API from "../services/api";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { PiStorefrontLight } from "react-icons/pi";
@@ -10,8 +10,12 @@ import {
   incrementWishlistCounter,
   onLoadSetWishlistCount,
 } from "../features/wishlistSlice";
+import {
+  incrementCartCounter,
+  onLoadSetCartCount,
+} from "../features/cartSlice";
 
-const ProductDetails = ({ liked }) => {
+const ProductDetails = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -19,7 +23,11 @@ const ProductDetails = ({ liked }) => {
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [wishlistLoading2, setWishlistLoading2] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
+  const [addToCart, setAddToCart] = useState(true);
+  const [cartLoading, setCartLoading] = useState(false);
+  const [fetchCartLoading, setFetchCartLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchProductDetails = async () => {
     try {
@@ -37,9 +45,9 @@ const ProductDetails = ({ liked }) => {
   const checkInWishlist = async () => {
     try {
       setWishlistLoading(true);
-      const res = await API.get(`wishlist/${id}`);
-      const res2 = await API.get(`/products`);
+      const res2 = await API.get(`/wishlist`);
       dispatch(onLoadSetWishlistCount(res2.data.wishlist.length));
+      const res = await API.get(`wishlist/${id}`);
       setInWishlist(res.data.success);
       setWishlistLoading(false);
     } catch (error) {
@@ -54,12 +62,11 @@ const ProductDetails = ({ liked }) => {
         setWishlistLoading2(true);
         await API.delete("/wishlist", { data: { productId: id } });
         dispatch(decrementWishlistCounter());
-        setInWishlist((prev) => !prev);
       } else {
         await API.post("/wishlist", { productId: id });
         dispatch(incrementWishlistCounter());
-        setInWishlist((prev) => !prev);
       }
+      setInWishlist((prev) => !prev);
       setWishlistLoading2(false);
     } catch (error) {
       console.error("Error updating wishlist:", error);
@@ -67,14 +74,67 @@ const ProductDetails = ({ liked }) => {
     }
   };
 
+  const handleClick = () => {
+    if (addToCart) {
+      handleAddToCart();
+    } else {
+      navigate("/cart");
+    }
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      if (addToCart) {
+        setCartLoading(true);
+        // check if product is already in cart
+        // const res = await API.get(`/cart/${id}`);
+        // if (res.data.success) {
+        //   return setAddToCart(false);
+        // }
+        await API.post("/cart", { productId: id });
+        dispatch(incrementCartCounter());
+        setAddToCart(false);
+        setCartLoading(false);
+      } else {
+        navigate("/cart");
+      }
+    } catch (error) {
+      console.error("Error adding to cart", error);
+      setCartLoading(false);
+    }
+  };
+
+  const fetchAllCartItems = async () => {
+    try {
+      setFetchCartLoading(true);
+      const res = await API.get("/cart");
+      // console.log(res.data.data.length);
+      dispatch(onLoadSetCartCount(res.data.data.length));
+      // console.log(res.data.data.includes((item) => (item.id = id)));
+      if (res.data.data.includes((item) => (item.id = id))) {
+        setAddToCart(false);
+      }
+      setFetchCartLoading(false);
+    } catch (error) {
+      console.error("Error getting all cart items", error);
+      setFetchCartLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchProductDetails();
     checkInWishlist();
-  }, [id]);
+    // handleAddToCart();
+    fetchAllCartItems();
+  }, []);
 
-  useEffect(() => {}, []);
-
-  if (loading && wishlistLoading && wishlistLoading2) {
+  if (
+    loading &&
+    wishlistLoading &&
+    wishlistLoading2 &&
+    cartLoading &&
+    fetchCartLoading
+  ) {
     return <h2 className="mx-auto font-bold bg-slate-200 p-5">Loading...</h2>;
   }
 
@@ -136,8 +196,14 @@ const ProductDetails = ({ liked }) => {
           >
             {inWishlist ? "Remove from wishlist" : " Add to Wishlist"}
           </button>
-          <button className="p-4 w-1/2 border border-black bg-black text-white rounded-md hover:bg-white hover:text-black transition">
-            Add to Cart
+          <button
+            className={`p-4 w-1/2 border border-black bg-black text-white rounded-md hover:bg-white hover:text-black transition hover:cursor-pointer"
+                
+            } `}
+            // disabled={!addToCart}
+            onClick={handleClick}
+          >
+            {addToCart ? "Add to Cart" : "Go to Cart"}
           </button>
         </div>
 

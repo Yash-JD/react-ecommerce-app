@@ -15,7 +15,7 @@ const Wishlist = () => {
       const result = await API.get("/wishlist");
       dispatch(onLoadSetWishlistCount(result.data.wishlist.length));
       setWishlist(result.data.wishlist);
-      console.log(wishlist);
+      // console.log(wishlist);
       setWishlistLoading(false);
     } catch (error) {
       console.log(error);

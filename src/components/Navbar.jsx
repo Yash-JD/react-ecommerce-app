@@ -25,7 +25,7 @@ const Navbar = () => {
       <div className="flex items-center space-x-2 h-[32px]">
         {/* logo */}
         <div className="flex items-center font-bold text-lg text-black">
-          <button onClick={() => navigate("/")}>E-Commerce Shop</button>
+          <button onClick={() => navigate("/")}>E-Shop</button>
         </div>
       </div>
 
@@ -78,7 +78,10 @@ const Navbar = () => {
 
         {/* Cart Icon with counter */}
         <div className="relative">
-          <IoCartOutline className="text-black w-6 h-6 hover:cursor-pointer hover:scale-110" />
+          <IoCartOutline
+            className="text-black w-6 h-6 hover:cursor-pointer hover:scale-110"
+            onClick={() => navigate("/cart")}
+          />
           <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
             {cartCounter}
           </span>
