@@ -10,7 +10,7 @@ export const cartCounterSlice = createSlice({
       state.value += 1;
     },
     decrementCartCounter: (state) => {
-      state.value += 1;
+      state.value -= 1;
     },
     onLoadSetCartCount: (state, action) => {
       state.value = action.payload;

@@ -5,7 +5,7 @@ import {
   incrementWishlistCounter,
   decrementWishlistCounter,
 } from "../features/wishlistSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 

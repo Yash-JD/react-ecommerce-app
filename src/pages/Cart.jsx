@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   decrementCartCounter,
   onLoadSetCartCount,
 } from "../features/cartSlice";
 import API from "../services/api";
 import { MdDeleteOutline } from "react-icons/md";
+import { onLoadSetWishlistCount } from "../features/wishlistSlice";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cartLoading, setCartLoading] = useState(false);
   const [cartData, setCartData] = useState(null);
   const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [wishlist, setWishlist] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const cartCounter = useSelector((state) => state.cartCounter.value);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchAllCartItems = async () => {
     try {
@@ -42,14 +48,13 @@ const Cart = () => {
 
   const removeFromCart = async (id) => {
     try {
-      setCartLoading(true);
+      setDeleteLoading(true);
       await API.delete("/cart", { data: { productId: id } });
       dispatch(decrementCartCounter());
-      setCartLoading(false);
-      fetchAllCartItems();
+      setDeleteLoading(false);
     } catch (error) {
       console.log(error);
-      setCartLoading(false);
+      setDeleteLoading(false);
     }
   };
 
@@ -58,15 +63,27 @@ const Cart = () => {
     wishlistProducts();
   }, []);
 
-  if (cartLoading && wishlistLoading) {
+  useEffect(() => {
+    fetchAllCartItems();
+  }, [deleteLoading]);
+
+  if (cartLoading && wishlistLoading && deleteLoading) {
     return <h2 className="mx-auto font-bold bg-slate-200 p-5">Loading...</h2>;
   }
 
-  if (!cartData) {
+  if (!cartData || cartCounter == 0) {
     return (
-      <h2 className="mx-auto font-bold bg-slate-200 p-5">
-        No product data available
-      </h2>
+      <div className="flex-col">
+        <h2 className="flex justify-center font-bold mx-auto p-5 m-4">
+          No product data available
+        </h2>
+        <button
+          className="flex mx-auto border shadow-sm p-4 m-5 rounded-md"
+          onClick={() => navigate("/")}
+        >
+          Continue shopping
+        </button>
+      </div>
     );
   }
 
@@ -80,10 +97,12 @@ const Cart = () => {
             className="flex items-center justify-between border-b border-gray-300 pb-4"
           >
             <div className="flex items-center gap-4">
+              {/* {item.imageUrls.length > 0 && ( */}
               <img
                 src={item.imageUrls[0].image_urls}
                 className="w-24 h-24 object-contain"
               />
+              {/* )} */}
               <div>
                 <h3 className="text-lg font-semibold">{item.name}</h3>
                 <p className="text-gray-600">₹{item.price}</p>
