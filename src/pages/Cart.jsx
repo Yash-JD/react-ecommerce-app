@@ -8,6 +8,7 @@ import API from "../services/api";
 import { MdDeleteOutline } from "react-icons/md";
 import { onLoadSetWishlistCount } from "../features/wishlistSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const [cartLoading, setCartLoading] = useState(false);
@@ -25,7 +26,6 @@ const Cart = () => {
       const res = await API.get("/cart");
       dispatch(onLoadSetCartCount(res.data.data.length));
       setCartData(res.data.data);
-      console.log(res.data.data);
       setCartLoading(false);
     } catch (error) {
       console.error("Error getting all cart items", error);
@@ -49,8 +49,14 @@ const Cart = () => {
   const removeFromCart = async (id) => {
     try {
       setDeleteLoading(true);
-      await API.delete("/cart", { data: { productId: id } });
+      const response = await API.delete("/cart", { data: { productId: id } });
       dispatch(decrementCartCounter());
+      // console.log(response.data.success);
+      if (response.data.sucess == "true")
+        toast.error(response.data.message, {
+          autoClose: 2000,
+        });
+      else toast.success(response.data.message, { autoClose: 2000 });
       setDeleteLoading(false);
     } catch (error) {
       console.log(error);

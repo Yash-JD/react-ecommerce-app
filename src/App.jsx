@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import Wishlist from "./pages/Wishlist";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
+import AddProduct from "./pages/AddProduct";
 
 function App() {
   return (
@@ -54,6 +55,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/addProduct" element={<AddProduct />} />
 
         <Route path="*" element={<h2>404 Not Found</h2>} />
       </Routes>

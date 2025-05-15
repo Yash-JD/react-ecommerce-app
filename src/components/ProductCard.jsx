@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
   const totalImages = imageUrls.length;
@@ -28,22 +29,37 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
     try {
       if (isLiked) {
         isLiked = false;
-        await API.delete("/wishlist", { data: { productId: id } });
+        const response = await API.delete("/wishlist", {
+          data: { productId: id },
+        });
         dispatch(decrementWishlistCounter());
-        // dispatch(removeLikedProducts(id));
+        if (response.data.sucess == "true")
+          toast.error(response.data.message, { autoClose: 2000 });
+        else toast.success(response.data.message, { autoClose: 2000 });
       } else {
         if (liked) {
-          await API.delete("/wishlist", { data: { productId: id } });
+          const response = await API.delete("/wishlist", {
+            data: { productId: id },
+          });
           dispatch(decrementWishlistCounter());
-          // dispatch(addLikedProducts(id));
+          if (response.data.sucess == "true")
+            toast.error(response.data.message, {
+              autoClose: 2000,
+            });
+          else toast.success(response.data.message, { autoClose: 2000 });
         } else {
-          await API.post("/wishlist", { productId: id });
+          const response = await API.post("/wishlist", { productId: id });
           dispatch(incrementWishlistCounter());
+          if (response.data.sucess == "true")
+            toast.error(response.data.message, {
+              autoClose: 2000,
+            });
+          else toast.success(response.data.message, { autoClose: 2000 });
         }
       }
       setLiked((prev) => !prev);
     } catch (error) {
-      console.error("Error updating wishlist:", error);
+      console.error(response.data.message, error);
     }
   };
 

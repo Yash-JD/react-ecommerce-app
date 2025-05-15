@@ -14,6 +14,7 @@ import {
   incrementCartCounter,
   onLoadSetCartCount,
 } from "../features/cartSlice";
+import { toast } from "react-toastify";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -60,11 +61,24 @@ const ProductDetails = () => {
     try {
       if (inWishlist) {
         setWishlistLoading2(true);
-        await API.delete("/wishlist", { data: { productId: id } });
+        const result = await API.delete("/wishlist", {
+          data: { productId: id },
+        });
         dispatch(decrementWishlistCounter());
+        console.log(result.data.success);
+        if (result.data.sucess == "true")
+          toast.error(result.data.message, {
+            autoClose: 2000,
+          });
+        else toast.success(result.data.message, { autoClose: 2000 });
       } else {
-        await API.post("/wishlist", { productId: id });
+        const result = await API.post("/wishlist", { productId: id });
         dispatch(incrementWishlistCounter());
+        if (result.data.sucess == "true")
+          toast.error(result.data.message, {
+            autoClose: 2000,
+          });
+        else toast.success(result.data.message, { autoClose: 2000 });
       }
       setInWishlist((prev) => !prev);
       setWishlistLoading2(false);
@@ -91,9 +105,14 @@ const ProductDetails = () => {
         // if (res.data.success) {
         //   return setAddToCart(false);
         // }
-        await API.post("/cart", { productId: id });
+        const result = await API.post("/cart", { productId: id });
         dispatch(incrementCartCounter());
         setAddToCart(false);
+        if (result.data.sucess == "true")
+          toast.error(result.data.message, {
+            autoClose: 2000,
+          });
+        else toast.success(result.data.message, { autoClose: 2000 });
         setCartLoading(false);
       } else {
         navigate("/cart");
@@ -198,7 +217,6 @@ const ProductDetails = () => {
           </button>
           <button
             className={`p-4 w-1/2 border border-black bg-black text-white rounded-md hover:bg-white hover:text-black transition hover:cursor-pointer"
-                
             } `}
             // disabled={!addToCart}
             onClick={handleClick}

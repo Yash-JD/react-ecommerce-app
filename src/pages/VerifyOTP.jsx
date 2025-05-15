@@ -14,7 +14,8 @@ const VerifyOTP = () => {
 
     try {
       const serverOTPToken = localStorage.getItem("serverOTPToken");
-      if (!serverOTPToken) return toast.error("OTP expired");
+      if (!serverOTPToken)
+        return toast.error("OTP expired", { autoClose: 2000 });
 
       const response = await API.post("/auth/verify-otp", {
         otp,
@@ -23,13 +24,14 @@ const VerifyOTP = () => {
 
       if (response.status == "201") {
         localStorage.clear("serverOTPToken");
-        toast.success(response.data.message);
+        toast.success(response.data.message, { autoClose: 2000 });
         return navigate("/login");
       }
-      return toast.error(response.data.message);
+      return toast.error(response.data.message, { autoClose: 2000 });
     } catch (error) {
       return toast.error(
-        error.response?.data?.message || "OTP verification failed"
+        error.response?.data?.message,
+        { autoClose: 2000 } || "OTP verification failed"
       );
     } finally {
       setLoading(false);
