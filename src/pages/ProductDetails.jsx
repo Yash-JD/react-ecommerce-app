@@ -106,6 +106,12 @@ const ProductDetails = () => {
         //   return setAddToCart(false);
         // }
         const result = await API.post("/cart", { productId: id });
+        // if (
+        //   result.data.status == 400 &&
+        //   result.data.message == "Product already exists in cart."
+        // )
+        // console.log(result.data);
+        toast.error(result.data.message);
         dispatch(incrementCartCounter());
         setAddToCart(false);
         if (result.data.sucess == "true")

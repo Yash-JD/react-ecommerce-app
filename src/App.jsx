@@ -13,6 +13,8 @@ import Wishlist from "./pages/Wishlist";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import AddProduct from "./pages/AddProduct";
+import IsSeller from "./routes/isSeller";
+import Address from "./pages/Address";
 
 function App() {
   return (
@@ -55,8 +57,25 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/checkout/address"
+          element={
+            <ProtectedRoute>
+              <Address />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/addProduct" element={<AddProduct />} />
+        <Route
+          path="/addProduct"
+          element={
+            <ProtectedRoute>
+              <IsSeller>
+                <AddProduct />
+              </IsSeller>
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<h2>404 Not Found</h2>} />
       </Routes>

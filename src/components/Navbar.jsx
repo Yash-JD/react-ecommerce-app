@@ -77,23 +77,32 @@ const Navbar = () => {
           <div className="flex gap-8 text-[16px] font-medium items-center whitespace-nowrap">
             {/* mens collection */}
             <div className="relative">
-              <span className="text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100">
+              <button
+                className="text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100"
+                onClick={() => navigate("/products")}
+              >
                 Men
-              </span>
+              </button>
             </div>
 
             {/* womens collection */}
             <div className="relative">
-              <span className="text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100">
+              <button
+                className="text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100"
+                onClick={() => navigate("/products")}
+              >
                 Women
-              </span>
+              </button>
             </div>
 
             {/* kids collection */}
             <div className="relative">
-              <span className="text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100">
+              <button
+                className="text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100"
+                onClick={() => navigate("/products")}
+              >
                 Kid
-              </span>
+              </button>
             </div>
           </div>
 

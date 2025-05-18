@@ -19,12 +19,14 @@ const Cart = () => {
   const cartCounter = useSelector((state) => state.cartCounter.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [changeQuantity, setChangeQuantity] = useState(false);
 
   const fetchAllCartItems = async () => {
     try {
       setCartLoading(true);
       const res = await API.get("/cart");
       dispatch(onLoadSetCartCount(res.data.data.length));
+      // console.log(res.data.data);
       setCartData(res.data.data);
       setCartLoading(false);
     } catch (error) {
@@ -64,14 +66,35 @@ const Cart = () => {
     }
   };
 
+  const handleQuantity = async (value, id) => {
+    try {
+      setChangeQuantity((prev) => !prev);
+      const res = await API.patch(`/cart/${id}`, { quantity: value });
+      // console.log(res.data);
+      toast.success(res.data.message, { autoClose: 2000 });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const placeOrder = async () => {
+    // console.log(cartData);
+    const res = await API.post("/orders", { products: cartData });
+    const total = cartData.reduce((total, product) => {
+      return parseInt(product.price) * product.quantity + total;
+    }, 0);
+    if (res.data.status == 400) return toast.error("Order already placed");
+    else return navigate("/checkout/address", { state: { total } });
+  };
+
   useEffect(() => {
-    fetchAllCartItems();
+    // fetchAllCartItems();
     wishlistProducts();
   }, []);
 
   useEffect(() => {
     fetchAllCartItems();
-  }, [deleteLoading]);
+  }, [deleteLoading, changeQuantity]);
 
   if (cartLoading && wishlistLoading && deleteLoading) {
     return <h2 className="mx-auto font-bold bg-slate-200 p-5">Loading...</h2>;
@@ -103,16 +126,44 @@ const Cart = () => {
             className="flex items-center justify-between border-b border-gray-300 pb-4"
           >
             <div className="flex items-center gap-4">
-              {/* {item.imageUrls.length > 0 && ( */}
               <img
                 src={item.imageUrls[0].image_urls}
                 className="w-24 h-24 object-contain"
               />
-              {/* )} */}
               <div>
                 <h3 className="text-lg font-semibold">{item.name}</h3>
                 <p className="text-gray-600">₹{item.price}</p>
               </div>
+            </div>
+            <div className="flex-col gap-1">
+              <div>Quantity: </div>
+              <div className="border mt-2 flex justify-between rounded">
+                <button
+                  className="bg-gray-300 w-1/3 rounded-l"
+                  onClick={(e) => handleQuantity(item.quantity - 1, item.id)}
+                >
+                  -
+                </button>
+                <span className="place-content-center">{item.quantity}</span>
+                <button
+                  className="bg-gray-300 w-1/3 rounded-r"
+                  onClick={(e) => handleQuantity(item.quantity + 1, item.id)}
+                >
+                  +
+                </button>
+              </div>
+              {/* <select
+                // name="quantity"
+                value={item.quantity}
+                className="border bg-slate-50"
+                onChange={(e) => handleQuantity(e.target.value, item.id)}
+              >
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value, index) => (
+                  <option key={index} value={value}>
+                    {value}
+                  </option>
+                ))}
+              </select> */}
             </div>
             <MdDeleteOutline
               className="size-7 hover:scale-125 cursor-pointer"
@@ -130,13 +181,16 @@ const Cart = () => {
           <span>Total:</span>
           <span className="font-semibold">
             ₹
-            {cartData.reduce((total, price) => {
-              return total + parseInt(price.price);
+            {cartData.reduce((total, product) => {
+              return parseInt(product.price) * product.quantity + total;
             }, 0)}
           </span>
         </div>
 
-        <button className="w-full mt-4 py-2 border border-black rounded hover:bg-red-600 hover:text-white hover:border-none transition">
+        <button
+          className="w-full mt-4 py-2 border border-black rounded hover:bg-red-600 hover:text-white hover:border-none transition"
+          onClick={placeOrder}
+        >
           Checkout
         </button>
       </div>
