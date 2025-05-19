@@ -118,6 +118,15 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
       {/* Price */}
       <p className="text-center text-[24px] font-bold mt-4">${price}</p>
 
+      {/* stock detials  */}
+      <p
+        className={`text-sm text-center mt-3 ${
+          quantity < 5 ? "text-red-500" : "text-green-400"
+        }`}
+      >
+        {quantity > 0 ? `${quantity} left in stock` : "Out of stock"}
+      </p>
+
       {/* Buy Now Button */}
       <div className="flex justify-center mt-4 mb-2">
         <button

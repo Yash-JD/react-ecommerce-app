@@ -80,11 +80,15 @@ const Cart = () => {
   const placeOrder = async () => {
     // console.log(cartData);
     const res = await API.post("/orders", { products: cartData });
-    const total = cartData.reduce((total, product) => {
-      return parseInt(product.price) * product.quantity + total;
-    }, 0);
-    if (res.data.status == 400) return toast.error("Order already placed");
-    else return navigate("/checkout/address", { state: { total } });
+    // console.log(res.data);
+    // const total = cartData.reduce((total, product) => {
+    //   return parseInt(product.price) * product.quantity + total;
+    // }, 0);
+    const orderId = res.data.orderDetails.id;
+    const total = res.data.orderDetails.total_amount;
+    return navigate("/checkout/address", {
+      state: { total, orderId },
+    });
   };
 
   useEffect(() => {

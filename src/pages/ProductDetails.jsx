@@ -111,14 +111,14 @@ const ProductDetails = () => {
         //   result.data.message == "Product already exists in cart."
         // )
         // console.log(result.data);
-        toast.error(result.data.message);
+        toast.success(result.data.message);
         dispatch(incrementCartCounter());
         setAddToCart(false);
-        if (result.data.sucess == "true")
-          toast.error(result.data.message, {
-            autoClose: 2000,
-          });
-        else toast.success(result.data.message, { autoClose: 2000 });
+        // if (result.data.sucess == "true")
+        //   toast.error(result.data.message, {
+        //     autoClose: 2000,
+        //   });
+        // else toast.success(result.data.message, { autoClose: 2000 });
         setCartLoading(false);
       } else {
         navigate("/cart");
