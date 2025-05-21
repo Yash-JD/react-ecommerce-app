@@ -60,7 +60,7 @@ const Products = () => {
     fetchProducts();
     wishlistProducts();
     fetchAllCartItems();
-  }, []);
+  }, [localStorage.getItem("token")]);
 
   // handle category search params
   const handleCategoryChange = (e) => {

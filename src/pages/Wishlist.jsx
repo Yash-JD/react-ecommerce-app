@@ -18,7 +18,10 @@ const Wishlist = () => {
       setWishlistLoading(true);
       const result = await API.get("/wishlist");
       const result2 = await API.get("/cart");
-      dispatch(onLoadSetCartCount(result2.data.data.length));
+      console.log(result2.data);
+      if (result2.data.success === false) dispatch(onLoadSetCartCount(0));
+      else dispatch(onLoadSetCartCount(result2.data.data.length));
+
       if (result.data.wishlist.length > 0) {
         dispatch(onLoadSetWishlistCount(result.data.wishlist.length));
         setWishlist(result.data.wishlist);

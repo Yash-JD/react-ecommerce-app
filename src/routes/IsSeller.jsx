@@ -5,7 +5,7 @@ const IsSeller = ({ children }) => {
   const IsSeller = localStorage.getItem("role");
 
   if (IsSeller != "seller") {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/products" replace />;
   }
 
   return children;

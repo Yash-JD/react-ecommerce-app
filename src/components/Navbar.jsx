@@ -45,7 +45,10 @@ const Navbar = () => {
 
       {role == "seller" ? (
         <div className="flex items-center gap-6 w-[144px] h-[32px] relative ">
-          <span className=" text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100">
+          <span
+            className=" text-black opacity-60 transition duration-200 ease-in-out hover:scale-105 hover:font-semibold cursor-pointer hover:opacity-100"
+            onClick={() => navigate("/admin/products")}
+          >
             My Products
           </span>
           {/* User Icon */}
@@ -140,7 +143,13 @@ const Navbar = () => {
               />
               {showUserMenu && (
                 <div className="absolute right-0 top-8 w-36 bg-white border border-gray-200 shadow-md rounded-lg py-2 z-50">
-                  <button className="block w-full px-4 py-2 text-left hover:bg-gray-100">
+                  <button
+                    className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                    onClick={() => {
+                      setShowUserMenu((prev) => !prev);
+                      navigate("/orders");
+                    }}
+                  >
                     My Orders
                   </button>
                   <button

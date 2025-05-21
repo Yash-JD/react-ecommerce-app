@@ -1,8 +1,8 @@
 import React, { use, useEffect, useState } from "react";
-import API from "../services/api";
 import { toast } from "react-toastify";
 import { MdDelete, MdModeEdit } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import API from "../services/api";
 
 const Address = () => {
   const [addressLoading, setAddressLoading] = useState(false);
@@ -23,6 +23,7 @@ const Address = () => {
   const location = useLocation();
   const cartTotal = location.state?.total;
   const orderId = location.state?.orderId;
+  const navigte = useNavigate();
 
   const fetchAllAddress = async () => {
     try {
@@ -132,7 +133,51 @@ const Address = () => {
     }
   };
 
-  const makePayement = async () => {};
+  const makePayement = async () => {
+    if (!billingAddress)
+      toast.error("Please select an address", { autoClose: 2000 });
+    try {
+      // 1. Create order on backend
+      const res = await API.post("/checkout/payment/createOrder", {
+        amount: cartTotal,
+        userName: billingAddress.user_name,
+        orderId: orderId,
+      });
+
+      if (res.data.success) {
+        // 2. Prepare Razorpay options
+        const options = {
+          key: res.data.key_id,
+          amount: res.data.amount,
+          currency: "INR",
+          order_id: res.data.order_id,
+          handler: async function (response) {
+            // 3. On payment success, notify backend
+            await API.post("/checkout/payment/paymentSuccess", {
+              payment_id: response.razorpay_payment_id,
+              order_id: response.razorpay_order_id,
+              db_order_id: orderId,
+            });
+            toast.success("Payment successful", { autoClose: 2000 });
+            navigte("/orders");
+          },
+          prefill: {
+            name: res.data.name,
+            email: res.data.email,
+          },
+          theme: { color: "#3399cc" },
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      } else {
+        toast.error("Failed to create order", { autoClose: 2000 });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to make payment", { autoClose: 2000 });
+    }
+  };
 
   useEffect(() => {
     fetchAllAddress();
@@ -193,9 +238,17 @@ const Address = () => {
       ) : (
         !showNewAddress &&
         !showEditAddress && (
-          <h2 className="text-2xl font-bold mb-4 text-center mx-auto mt-4">
-            No Address Found
-          </h2>
+          <div className="w-[450px] mx-auto bg-white p-8 rounded-lg shadow-md space-y-6 m-6">
+            <h2 className="text-2xl font-bold mb-4 text-center mx-auto mt-4">
+              No Address Found
+            </h2>
+            <button
+              className="bg-sky-600 text-white p-2 rounded flex mx-auto mb-4"
+              onClick={() => setShowNewAddress(!showNewAddress)}
+            >
+              Add new address
+            </button>
+          </div>
         )
       )}
 
