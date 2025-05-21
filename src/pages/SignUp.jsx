@@ -24,14 +24,16 @@ const SignUp = () => {
     // validate email
     if (!validateEmail(form.email)) {
       return toast.error(
-        "Email must contain all lowercase, no number domain and no special symbols."
+        "Email must contain all lowercase, no number domain and no special symbols.",
+        { autoClose: 2000 }
       );
     }
 
     // validate password
     if (!validatePassword(form.password)) {
       return toast.error(
-        "Password must contain atleat 8 characters with atleast one Uppercase, one lowercase, one number and one special character."
+        "Password must contain atleat 8 characters with atleast one Uppercase, one lowercase, one number and one special character.",
+        { autoClose: 2000 }
       );
     }
 
@@ -43,12 +45,15 @@ const SignUp = () => {
       if (response.status == "200") {
         // save server otp token in localstorage
         localStorage.setItem("serverOTPToken", response.data.otpToken);
-        toast.success(response.data.message);
+        toast.success(response.data.message, { autoClose: 2000 });
         return navigate("/verify-otp");
       }
-      return toast.error(response.data.message);
+      return toast.error(response.data.message, { autoClose: 2000 });
     } catch (error) {
-      return toast.error(error.response?.data?.message || "SignUp failed");
+      return toast.error(
+        error.response?.data?.message,
+        { autoClose: 2000 } || "SignUp failed"
+      );
     } finally {
       setLoading(false);
     }

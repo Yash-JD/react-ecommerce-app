@@ -10,6 +10,13 @@ import Products from "./pages/Products";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Wishlist from "./pages/Wishlist";
+import ProductDetails from "./pages/ProductDetails";
+import Cart from "./pages/Cart";
+import IsSeller from "./routes/isSeller";
+import Address from "./pages/Address";
+import Orders from "./pages/Orders";
+import IsUser from "./routes/isUser";
+import AdminProducts from "./pages/AdminProducts";
 
 function App() {
   return (
@@ -19,12 +26,26 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
+
+        {/* user routes  */}
         <Route path="/" element={<Home />} />
         <Route
           path="/products"
           element={
             <ProtectedRoute>
-              <Products />
+              <IsUser>
+                <Products />
+              </IsUser>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/:id"
+          element={
+            <ProtectedRoute>
+              <IsUser>
+                <ProductDetails />
+              </IsUser>
             </ProtectedRoute>
           }
         />
@@ -32,7 +53,52 @@ function App() {
           path="/wishlist"
           element={
             <ProtectedRoute>
-              <Wishlist />
+              <IsUser>
+                <Wishlist />
+              </IsUser>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <IsUser>
+                <Cart />
+              </IsUser>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkout/address"
+          element={
+            <ProtectedRoute>
+              <IsUser>
+                <Address />
+              </IsUser>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <IsUser>
+                <Orders />
+              </IsUser>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* seller routes  */}
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedRoute>
+              <IsSeller>
+                <AdminProducts />
+              </IsSeller>
             </ProtectedRoute>
           }
         />

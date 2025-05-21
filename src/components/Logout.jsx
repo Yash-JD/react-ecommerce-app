@@ -9,6 +9,7 @@ const Logout = () => {
   const handleClick = () => {
     if (status) {
       Cookies.remove("userToken");
+      localStorage.clear("role");
       setStatus(false);
     } else {
       navigate("/login");

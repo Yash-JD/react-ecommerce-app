@@ -3,7 +3,7 @@ import ProductCard from "../components/ProductCard";
 import API from "../services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { onLoadSetWishlistCount } from "../features/wishlistSlice";
-import { addCategory } from "../features/filterSlice";
+import { onLoadSetCartCount } from "../features/cartSlice";
 
 const Products = () => {
   const [response, setResponse] = useState([]);
@@ -12,6 +12,7 @@ const Products = () => {
   const [wishlist, setWishlist] = useState([]);
   const dispatch = useDispatch();
   const [searchCategory, setSearchCategory] = useState([]);
+  const [fetchCartLoading, setFetchCartLoading] = useState(false);
 
   // fetch all products
   async function fetchProducts() {
@@ -41,11 +42,25 @@ const Products = () => {
     }
   }
 
+  const fetchAllCartItems = async () => {
+    try {
+      setFetchCartLoading(true);
+      const res = await API.get("/cart");
+      // console.log(res.data.data.length);
+      dispatch(onLoadSetCartCount(res.data.data.length));
+      setFetchCartLoading(false);
+    } catch (error) {
+      console.error("Error getting all cart items", error);
+      setFetchCartLoading(false);
+    }
+  };
+
   // fetch on first render only
   useEffect(() => {
     fetchProducts();
     wishlistProducts();
-  }, []);
+    fetchAllCartItems();
+  }, [localStorage.getItem("token")]);
 
   // handle category search params
   const handleCategoryChange = (e) => {
@@ -58,7 +73,7 @@ const Products = () => {
 
   const handleSearch = async () => {
     try {
-      // setLoading(true);
+      setLoading(true);
       let url = "/products?category=";
       url += searchCategory.join(",");
       // Update the browser's URL without reloading the page
@@ -75,6 +90,7 @@ const Products = () => {
   const handleResetFilters = () => {
     setSearchCategory([]);
     fetchProducts();
+    window.history.pushState(null, "", "");
   };
 
   return (
@@ -147,8 +163,8 @@ const Products = () => {
       </div>
       {/* display all products */}
       <div className="grid grid-cols-1 gap-5 w-3/4 xl:grid-cols-2">
-        {loading && wishlistLoading ? (
-          <h2>Loading...</h2>
+        {loading && wishlistLoading && fetchCartLoading ? (
+          <h2 className="mx-auto font-bold bg-slate-200 p-5">Loading...</h2>
         ) : response && response.products && response.products.length > 0 ? (
           //  && wishlist && wishlist.length
           response.products.map((product) => (

@@ -20,16 +20,21 @@ const Login = () => {
     // validate email
     if (!validateEmail(form.email)) {
       return toast.error(
-        "Email must contain all lowercase, no number domain and no special symbols."
+        "Email must contain all lowercase, no number domain and no special symbols.",
+        { autoClose: 2000 }
       );
     }
 
     // validate password
     if (!validatePassword(form.password)) {
       return toast.error(
-        "Password must contain atleat 8 characters with atleast one Uppercase, one lowercase, one number and one special character."
+        "Password must contain atleat 8 characters with atleast one Uppercase, one lowercase, one number and one special character.",
+        { autoClose: 2000 }
       );
     }
+
+    // add user role in localstorage
+    localStorage.setItem("role", form.role);
 
     setLoading(true);
 
@@ -40,11 +45,14 @@ const Login = () => {
         // Save token which contains user information
         Cookies.set("userToken", response.data.userData, { expires: 7 });
         navigate("/");
-        return toast.success(response.data.message);
+        return toast.success(response.data.message, { autoClose: 2000 });
       }
-      return toast.error(response.data.message);
+      return toast.error(response.data.message, { autoClose: 2000 });
     } catch (error) {
-      return toast.error(error.response?.data?.message || "Login failed");
+      return toast.error(
+        error.response?.data?.message,
+        { autoClose: 2000 } || "Login failed"
+      );
     } finally {
       setLoading(false);
     }

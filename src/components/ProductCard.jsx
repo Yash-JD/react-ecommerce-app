@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { PiGreaterThan, PiLessThan } from "react-icons/pi";
 import {
   incrementWishlistCounter,
   decrementWishlistCounter,
 } from "../features/wishlistSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import API from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
   const totalImages = imageUrls.length;
   const [liked, setLiked] = useState(isLiked);
   const [currentImage, setCurrentImage] = useState(0);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const prevImage = () => {
     setCurrentImage((prev) => (prev > 0 ? prev - 1 : prev));
@@ -26,22 +29,37 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
     try {
       if (isLiked) {
         isLiked = false;
-        await API.delete("/wishlist", { data: { productId: id } });
+        const response = await API.delete("/wishlist", {
+          data: { productId: id },
+        });
         dispatch(decrementWishlistCounter());
-        // dispatch(removeLikedProducts(id));
+        if (response.data.sucess == "true")
+          toast.error(response.data.message, { autoClose: 2000 });
+        else toast.success(response.data.message, { autoClose: 2000 });
       } else {
         if (liked) {
-          await API.delete("/wishlist", { data: { productId: id } });
+          const response = await API.delete("/wishlist", {
+            data: { productId: id },
+          });
           dispatch(decrementWishlistCounter());
-          // dispatch(addLikedProducts(id));
+          if (response.data.sucess == "true")
+            toast.error(response.data.message, {
+              autoClose: 2000,
+            });
+          else toast.success(response.data.message, { autoClose: 2000 });
         } else {
-          await API.post("/wishlist", { productId: id });
+          const response = await API.post("/wishlist", { productId: id });
           dispatch(incrementWishlistCounter());
+          if (response.data.sucess == "true")
+            toast.error(response.data.message, {
+              autoClose: 2000,
+            });
+          else toast.success(response.data.message, { autoClose: 2000 });
         }
       }
       setLiked((prev) => !prev);
     } catch (error) {
-      console.error("Error updating wishlist:", error);
+      console.error(response.data.message, error);
     }
   };
 
@@ -100,9 +118,9 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
       {/* Price */}
       <p className="text-center text-[24px] font-bold mt-4">${price}</p>
 
-      {/* quantity Info */}
+      {/* stock detials  */}
       <p
-        className={`text-center text-sm mt-1 ${
+        className={`text-sm text-center mt-3 ${
           quantity < 5 ? "text-red-500" : "text-green-400"
         }`}
       >
@@ -118,6 +136,7 @@ const ProductCard = ({ id, imageUrls, name, price, quantity, isLiked }) => {
               ? "bg-gray-300 text-gray-600 cursor-not-allowed"
               : "bg-black text-white hover:bg-gray-800"
           }`}
+          onClick={() => navigate(`/products/${id}`)}
         >
           Read More
         </button>
